@@ -1,4 +1,4 @@
-import multipleArbitrableTransactionArtifact from 'kleros-interaction/build/contracts/MultipleArbitrableTransaction'
+import multipleArbitrableTransactionArtifact from 'libescrow-smart-contract/build/contracts/MultipleArbitrableTransaction'
 import _ from 'lodash'
 
 import * as contractConstants from '../../../constants/contract'

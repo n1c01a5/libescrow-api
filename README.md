@@ -1,4 +1,4 @@
-# Kleros API
+# Libescrow API
 
 <p align="center">
   <a href="https://badge.fury.io/js/kleros-api"><img src="https://badge.fury.io/js/kleros-api.svg" alt="NPM Version"></a>

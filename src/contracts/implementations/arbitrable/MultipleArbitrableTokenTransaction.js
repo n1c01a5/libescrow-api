@@ -1,4 +1,4 @@
-import multipleArbitrableTransactionArtifact from 'libescrow-smart-contract/build/contracts/MultipleArbitrableTokenTransaction'
+import multipleArbitrableTokenTransactionArtifact from 'libescrow-smart-contract/build/contracts/MultipleArbitrableTokenTransaction'
 import _ from 'lodash'
 
 import * as contractConstants from '../../../constants/contract'
@@ -10,20 +10,20 @@ import Arbitrable from './Arbitrable'
 /**
  * Provides interaction with an Arbitrable Transaction contract deployed on the blockchain.
  */
-class MultipleArbitrableTransaction extends Arbitrable {
+class MultipleArbitrableTokenTransaction extends Arbitrable {
   /**
    * Constructor ArbitrableTransaction.
    * @param {object} web3Provider instance
    * @param {string} contractAddress of the contract
    */
   constructor(web3Provider, contractAddress) {
-    super(web3Provider, multipleArbitrableTransactionArtifact, contractAddress)
+    super(web3Provider, multipleArbitrableTokenTransactionArtifact, contractAddress)
 
     this.arbitrableTransactionId = null
   }
 
   /**
-   * Deploy MultipleArbitrableTransaction.
+   * Deploy MultipleTokenArbitrableTransaction.
    * @param {object} account Ethereum account
    * @param {object} web3Provider web3 provider object
    * @returns {object} truffle-contract Object | err The deployed contract or an error
@@ -32,7 +32,7 @@ class MultipleArbitrableTransaction extends Arbitrable {
     const contractDeployed = await deployContractAsync(
       account,
       0,
-      multipleArbitrableTransactionArtifact,
+      multipleArbitrableTokenTransactionArtifact,
       web3Provider
     )
 
@@ -40,9 +40,10 @@ class MultipleArbitrableTransaction extends Arbitrable {
   }
 
   /**
-   * Create MultipleArbitrableTransaction.
+   * Create Token.
    * @param {object} account Ethereum account
    * @param {string} arbitratorAddress The address of the arbitrator contract
+   * @param {string} tokenAddress The address of the token contract
    * @param {object} seller Seller Ethereum account
    * @param {number} value funds to be placed in contract
    * @param {number} timeout Time (seconds) after which a party automatically loose a dispute. (default 3600)
@@ -50,12 +51,12 @@ class MultipleArbitrableTransaction extends Arbitrable {
    * @param {string} metaEvidenceUri Uri meta-evidence. (default empty string)
    * @returns {object} truffle-contract Object | err The deployed contract or an error
    */
-  createArbitrableTransaction = async (
+  createArbitrableTokenTransaction = async (
     account,
     arbitratorAddress,
-    tokenAddress,
+    arbitratorTokenAddress,
     seller,
-    amount,
+    value,
     timeout = 3600,
     arbitratorExtraData = 0x0,
     metaEvidenceUri
@@ -65,14 +66,14 @@ class MultipleArbitrableTransaction extends Arbitrable {
     try {
       return this.contractInstance.createTransaction(
         arbitratorAddress,
-        tokenAddress,
+        arbitratorTokenAddress,
         timeout,
-        amount,
         seller,
         arbitratorExtraData,
         metaEvidenceUri,
         {
           from: account,
+          value: value,
           gas: process.env.GAS || undefined
         }
       )
@@ -110,7 +111,11 @@ class MultipleArbitrableTransaction extends Arbitrable {
    * @param {amount} amount - Part or all of the amount of the good or the service.
    * @returns {object} - The result transaction object.
    */
-  reimburse = async (account, arbitrableTransactionId, amount) => {
+  reimburse = async (
+    account,
+    arbitrableTransactionId,
+    amount
+  ) => {
     await this.loadContract()
 
     try {
@@ -363,4 +368,4 @@ class MultipleArbitrableTransaction extends Arbitrable {
   }
 }
 
-export default MultipleArbitrableTransaction
+export default MultipleArbitrableTokenTransaction
